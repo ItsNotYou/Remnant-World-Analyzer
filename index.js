@@ -283,9 +283,17 @@ function showDataFile(e, o){
 
     text = e.target.result
     text = text.split("/Game/Campaign_Main/Quest_Campaign_Ward13.Quest_Campaign_Ward13")[0]
-    text = text.split("/Game/Campaign_Main/Quest_Campaign_City.Quest_Campaign_City")[1].replace(/Game/g,"\n")
-
-    textArray = text.split("\n")
+    text = text.split("/Game/Campaign_Main/Quest_Campaign_City.Quest_Campaign_City")
+    if (text.length >= 2) {
+        // base campaign detected
+        text = tester[1].replace(/Game/g, "\n")
+        textArray = text.split("\n")
+    }
+    else {
+        // subject 2923 campaign detected, skip it for now
+        // a good splitter might be /Game/Campaign_Clementine/Quest_Campaign_Clementine.Quest_Campaign_Clementine_C
+        textArray = undefined
+    }
 
    adText = e.target.result
 
@@ -310,7 +318,9 @@ function showDataFile(e, o){
     if (adventureMode) {
         getWorldData(adTextArray, "#adventure")
     }
-    getWorldData(textArray, "#main")
+    if (textArray) {
+        getWorldData(textArray, "#main")
+    }
 
     $('.main-mode').show()
     $('.adventure-mode').hide()
